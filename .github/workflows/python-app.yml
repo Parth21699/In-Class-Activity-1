@@ -1,14 +1,12 @@
 name: CI - Python App
 
-# Trigger the workflow on push or pull request to 'main' or 'develop' branches
 on:
   push:
     branches: [ "main", "develop" ]
   pull_request:
     branches: [ "main", "develop" ]
-  workflow_dispatch:  # Allow manual trigger from GitHub UI
+  workflow_dispatch:
 
-# Set permissions for the workflow
 permissions:
   contents: read
 
@@ -23,7 +21,7 @@ jobs:
       - name: Set up Python 3.11
         uses: actions/setup-python@v3
         with:
-          python-version: "3.11"  # Updated to latest stable Python
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
@@ -33,9 +31,7 @@ jobs:
 
       - name: Run code linting with flake8
         run: |
-          # Fail on critical issues
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          # Report all lint warnings
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
       - name: Run tests with coverage
@@ -44,7 +40,7 @@ jobs:
 
       - name: Upload coverage report (optional)
         if: success()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: .coverage
